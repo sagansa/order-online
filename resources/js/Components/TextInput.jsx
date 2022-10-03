@@ -1,14 +1,16 @@
-import React, { useEffect, useRef } from 'react';
+import clsx from "clsx";
+import React, { useEffect, useRef } from "react";
 
 export default function TextInput({
-    type = 'text',
-    name,
-    value,
+    type = "text",
+    // name,
+    // value,
     className,
-    autoComplete,
-    required,
+    // autoComplete,
+    // required,
     isFocused,
-    handleChange,
+    // handleChange,
+    ...props
 }) {
     const input = useRef();
 
@@ -21,17 +23,18 @@ export default function TextInput({
     return (
         <div className="flex flex-col items-start">
             <input
+                {...props}
                 type={type}
-                name={name}
-                value={value}
-                className={
-                    `border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm ` +
+                // name={name}
+                // value={value}
+                className={clsx(
+                    "border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm",
                     className
-                }
+                )}
                 ref={input}
-                autoComplete={autoComplete}
-                required={required}
-                onChange={(e) => handleChange(e)}
+                // autoComplete={autoComplete}
+                // required={required}
+                // onChange={(e) => handleChange(e)}
             />
         </div>
     );

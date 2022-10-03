@@ -5,11 +5,10 @@ import Container from "@/Components/Container";
 
 export default function Dashboard(props) {
     return (
-        <>
+        <div>
             <Head title="Dashboard" />
-
             <Container>Dashboard</Container>
-        </>
+        </div>
     );
 }
 

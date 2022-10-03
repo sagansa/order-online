@@ -1,10 +1,9 @@
 import React from "react";
 import ApplicationLogo from "@/Components/ApplicationLogo";
-import Dropdown from "@/Components/Dropdown";
 import NavLink from "@/Components/NavLink";
-import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
 import { Link, usePage } from "@inertiajs/inertia-react";
 import Container from "@/Components/Container";
+import DropdownMenu from "@/Components/DropdownMenu";
 
 export default function Navbar() {
     const { auth } = usePage().props;
@@ -13,17 +12,31 @@ export default function Navbar() {
             <Container>
                 <div className="flex items-center justify-between">
                     <ApplicationLogo />
-                    <div className="flex items-center ap-x-6">
+                    <div className="flex items-center gap-x-6">
                         <NavLink href="/">Home</NavLink>
-                        <NavLink href="/dashboard">Dashboard</NavLink>
+                        <NavLink href="/products">Products</NavLink>
                         {auth.user ? (
                             <>
-                                <NavLink href="/profile">
-                                    {auth.user.name}
-                                </NavLink>
-                                <NavLink href="/logout" method="post">
-                                    Logout
-                                </NavLink>
+                                <DropdownMenu label={auth.user.name}>
+                                    <DropdownMenu.Link href="/dashboard">
+                                        Dashboard
+                                    </DropdownMenu.Link>
+                                    <DropdownMenu.Link href="/profile">
+                                        Profile
+                                    </DropdownMenu.Link>
+                                    <DropdownMenu.Link href="/cart">
+                                        Your cart
+                                    </DropdownMenu.Link>
+                                    <DropdownMenu.Link href="/history">
+                                        Your history
+                                    </DropdownMenu.Link>
+                                    <DropdownMenu.Link
+                                        href="/logout"
+                                        method="post"
+                                    >
+                                        Logout
+                                    </DropdownMenu.Link>
+                                </DropdownMenu>
                             </>
                         ) : (
                             <>

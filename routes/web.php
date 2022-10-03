@@ -2,11 +2,12 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
-use Illuminate\Foundation\Application;
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 Route::get('/', HomeController::class)->name('home');
+
+Route::resource('/products', ProductController::class);
 
 Route::middleware('auth')->group(function() {
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
