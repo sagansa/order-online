@@ -2,7 +2,10 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Cart;
+use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Inertia\Middleware;
 use Tightenco\Ziggy\Ziggy;
 
@@ -34,15 +37,24 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request)
     {
+        // Cache::forget('categories_navbar');
+        // Cache::flush();
+
+        // $cartBelongsToRequestUser = $request->user() ? : null;
+
+        $carts_global_count = $request->user() ? Cache::rememberForever('carts_global_count', fn () => Cart::whereBelongsTo($request->user())->whereNull('paid_at')->count() ) : null;
+
         return array_merge(parent::share($request), [
             'auth' => [
                 'user' => $request->user(),
             ],
-            'ziggy' => function () use ($request) {
-                return array_merge((new Ziggy)->toArray(), [
-                    'location' => $request->url(),
-                ]);
-            },
+            'ziggy' => fn () => (new Ziggy)->toArray(),
+
+            'categories_global' => Cache::rememberForever('categories_global', fn () => Category::whereHas('products')->get()->map(fn ($q) => [
+                'name' => $q->name,
+                'slug' => $q->slug,
+            ])),
+            'carts_global_count' => $carts_global_count,
         ]);
     }
 }

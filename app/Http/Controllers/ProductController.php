@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\ProductResource;
+use App\Http\Resources\ProductSingleResource;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -18,7 +19,7 @@ class ProductController extends Controller
     {
         $products = Product::query()
             ->with('category')
-            ->when($request->category, fn ($q, $v) => $q->whereBelongTo(Category::where('slug', $v)->first()))
+            ->when($request->category, fn ($q, $v) => $q->whereBelongsTo(Category::where('slug', $v)->first()))
             ->select('id', 'price', 'slug', 'name', 'picture', 'category_id')
             ->paginate(12)
             ->withQueryString();
@@ -57,7 +58,11 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        //
+        // return ProductSingleResource::make($product->load('category'));
+
+        return inertia('Products/Show', [
+            'product' => ProductSingleResource::make($product->load('category')),
+        ]);
     }
 
     /**
